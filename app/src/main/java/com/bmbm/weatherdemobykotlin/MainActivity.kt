@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
+import org.jetbrains.anko.async
+import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,9 +24,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val rv_container = findViewById(R.id.rv_container) as RecyclerView
-        rv_container.layoutManager = LinearLayoutManager(this);
+//        val rv_container: RecyclerView = find(R.id.rv_container) //Anko库中的方法
+        rv_container.layoutManager = LinearLayoutManager(this)
         rv_container.adapter = ForecastListAdapter(items)
 
+        val url="http://www.sojson.com/open/api/weather/json.shtml?city=北京"
+        async {
+            Log.d(javaClass.simpleName,"run=============")
+            Request(url).run()
+            uiThread {
+                loadingDialog("请求成功").show()
+            }
+        }
+
     }
+
+
 
 }
