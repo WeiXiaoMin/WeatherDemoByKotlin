@@ -1,4 +1,4 @@
-package com.bmbm.weatherdemobykotlin
+package com.bmbm.weatherdemobykotlin.extensions
 
 import android.app.Activity
 import android.app.AlertDialog

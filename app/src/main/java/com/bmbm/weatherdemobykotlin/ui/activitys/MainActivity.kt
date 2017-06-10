@@ -1,10 +1,14 @@
-package com.bmbm.weatherdemobykotlin
+package com.bmbm.weatherdemobykotlin.ui.activitys
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import com.bmbm.weatherdemobykotlin.ui.adapters.ForecastListAdapter
+import com.bmbm.weatherdemobykotlin.R
+import com.bmbm.weatherdemobykotlin.extensions.loadingDialog
+import com.bmbm.weatherdemobykotlin.test.Request
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
 

@@ -1,4 +1,4 @@
-package com.bmbm.weatherdemobykotlin
+package com.bmbm.weatherdemobykotlin.test
 
 /**
  * 属性示例

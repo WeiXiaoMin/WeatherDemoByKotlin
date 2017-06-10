@@ -1,4 +1,4 @@
-package com.bmbm.weatherdemobykotlin
+package com.bmbm.weatherdemobykotlin.test
 
 import android.util.Log
 import java.net.URL
