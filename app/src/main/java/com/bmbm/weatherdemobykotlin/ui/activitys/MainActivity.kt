@@ -3,46 +3,58 @@ package com.bmbm.weatherdemobykotlin.ui.activitys
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.util.Log
-import com.bmbm.weatherdemobykotlin.ui.adapters.ForecastListAdapter
+import android.support.v7.widget.Toolbar
 import com.bmbm.weatherdemobykotlin.R
-import com.bmbm.weatherdemobykotlin.extensions.loadingDialog
-import com.bmbm.weatherdemobykotlin.test.Request
-import org.jetbrains.anko.async
+import com.bmbm.weatherdemobykotlin.domain.RequestForecastCommand
+import com.bmbm.weatherdemobykotlin.extensions.LongPreferences
+import com.bmbm.weatherdemobykotlin.extensions.getContext
+import com.bmbm.weatherdemobykotlin.extensions.logd
+import com.bmbm.weatherdemobykotlin.ui.adapters.ForecastListAdapter
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.find
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ToolbarManager {
 
-    private val items = listOf(
-            "Mon	6/23	-	Sunny	-	31/17",
-            "Tue	6/24	-	Foggy	-	21/8",
-            "Wed	6/25	-	Cloudy	-	22/17",
-            "Thurs	6/26	-	Rainy	-	18/11",
-            "Fri	6/27	-	Foggy	-	21/10",
-            "Sat	6/28	-	TRAPPED	IN	WEATHERSTATION	-	23/18",
-            "Sun	6/29	-	Sunny	-	20/7")
+    override val mToolbar: Toolbar by lazy { find<Toolbar>(R.id.toolbar) }
+    private var mZipCode:Long by LongPreferences(this,SettingActivity.KEY_ZIPCODE,SettingActivity.DEFULT_ZIPCODE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val rv_container = findViewById(R.id.rv_container) as RecyclerView
+        initToolbar()
+
+//        val rv_container = findViewById(R.id.rv_container) as RecyclerView
 //        val rv_container: RecyclerView = find(R.id.rv_container) //Anko库中的方法
-        rv_container.layoutManager = LinearLayoutManager(this)
-        rv_container.adapter = ForecastListAdapter(items)
 
-        val url="http://www.sojson.com/open/api/weather/json.shtml?city=北京"
-        async {
-            Log.d(javaClass.simpleName,"run=============")
-            Request(url).run()
-            uiThread {
-                loadingDialog("请求成功").show()
-            }
-        }
-
+        rv_container.layoutManager = LinearLayoutManager(getContext())
+        attachToScroll(rv_container)
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadForecast()
+    }
+
+    private fun loadForecast() = doAsync {
+
+        val result = RequestForecastCommand(mZipCode).execute()
+
+        logd(msg = result.toString())
+
+        uiThread {
+
+            rv_container.adapter = ForecastListAdapter(result) {
+                startActivity<DetailActivity>(DetailActivity.ID to it.id,
+                        DetailActivity.CITY_NAME to result.city)
+            }
+
+            toolbarTitle="${result.city}(${result.country})"
+        }
+    }
 
 
 }

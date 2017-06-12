@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">WeatherDemoByKotlin</string>
     <string name="test">hello kotlin</string>
+    <string name="setting">设置</string>
+    <string name="city_zipcode">城市代码</string>
 </resources>
