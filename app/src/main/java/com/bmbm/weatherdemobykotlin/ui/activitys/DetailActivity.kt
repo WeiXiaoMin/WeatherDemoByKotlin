@@ -58,7 +58,7 @@ class DetailActivity : AppCompatActivity(), ToolbarManager {
 
                 icon = imageView(R.mipmap.ic_launcher) {
                     scaleType = ImageView.ScaleType.FIT_CENTER
-                }.lparams(dpSize(64f).toInt(), dpSize(64f).toInt())
+                }.lparams(dip(64), dip(64))
 
                 weatherDescription = textView("description") {
 
