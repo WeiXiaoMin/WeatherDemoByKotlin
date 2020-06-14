@@ -15,7 +15,6 @@ import com.bmbm.weatherdemobykotlin.extensions.*
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.themedToolbar
-import org.jetbrains.anko.appcompat.v7.toolbar
 import java.text.DateFormat
 
 
@@ -38,35 +37,20 @@ class DetailActivity : AppCompatActivity(), ToolbarManager {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_detail)
 
-//        Log.d(javaClass.simpleName, "android.support.v7.appcompat.R.attr.actionBarSize = ${android.support.v7.appcompat.R.attr.actionBarSize}")
-//        Log.d(javaClass.simpleName, "android.R.attr.actionBarSize = ${android.R.attr.actionBarSize}")
-
         verticalLayout {
 
-            //wxm: R.attr.xxx 一开始获取不到可能是编译问题？？clear工程一次应该就可以了
-//            val toolbarTypeValue = typedValue(android.support.v7.appcompat.R.attr.actionBarSize)
-//            logd( toolbarTypeValue.toString())
-//            val tHeigh=TypedValue.complexToDimensionPixelSize(toolbarTypeValue.data,displayMetrics)
-
-            myToolbar = toolbar {
+            myToolbar = themedToolbar(android.support.v7.appcompat.R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
                 val bgTv = typedValue(android.support.v7.appcompat.R.attr.colorPrimary)
                 backgroundColor = bgTv.data
-//                title = "toolbar"
-
+                popupTheme = android.support.v7.appcompat.R.style.ThemeOverlay_AppCompat_Light
             }.lparams(width = matchParent) {
                 //wxm : 使用默认值即可
                 val toolbarTv = typedValue(android.support.v7.appcompat.R.attr.actionBarSize)
                 Log.d(this@DetailActivity.javaClass.simpleName, toolbarTv.toString())
-//                width= matchParent
                 height = TypedValue.complexToDimensionPixelSize(toolbarTv.data, displayMetrics)
-
-            }.themedToolbar(android.support.v7.appcompat.R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
-                popupTheme = android.support.v7.appcompat.R.style.ThemeOverlay_AppCompat_Light
             }
 
-
             linearLayout {
-
                 leftPadding = dimen(R.dimen.spacing_xlarge)
                 rightPadding = dimen(R.dimen.spacing_xlarge)
                 topPadding = dimen(R.dimen.spacing_xlarge)
@@ -108,7 +92,6 @@ class DetailActivity : AppCompatActivity(), ToolbarManager {
                 }.lparams(width = 0, weight = 1f) {
                     margin = dimen(R.dimen.spacing_xlarge)
                 }
-
 
             }.lparams(width = matchParent)
         }
